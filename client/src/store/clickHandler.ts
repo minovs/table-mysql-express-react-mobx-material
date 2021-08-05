@@ -6,24 +6,10 @@ class ClickHandler {
   constructor() {
     makeAutoObservable(this)
   }
-  async addVisit(name: string, classes: string) {
+  async visitAction(method: string, name: string, classes: string) {
     try {
       await fetch(`/api/visit`, {
-        method: 'PUT',
-        body: JSON.stringify({ name, classes }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      TableContent.fetchTableContent()
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  async delVisit(name: string, classes: string) {
-    try {
-      await fetch(`/api/visit`, {
-        method: 'DELETE',
+        method: method,
         body: JSON.stringify({ name, classes }),
         headers: {
           'Content-Type': 'application/json',
@@ -37,13 +23,11 @@ class ClickHandler {
   clickHandler(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const { name, classes, value } = e.currentTarget.dataset
     if (value === 'H') {
-      if (window.confirm('Змінити дані?') && name !== undefined && classes !== undefined) {
-        this.addVisit(name, classes)
-      }
+      if (window.confirm('Змінити дані?') && name !== undefined && classes !== undefined)
+        this.visitAction('PUT', name, classes)
     } else {
-      if (window.confirm('Змінити дані?') && name !== undefined && classes !== undefined) {
-        this.delVisit(name, classes)
-      }
+      if (window.confirm('Змінити дані?') && name !== undefined && classes !== undefined)
+        this.visitAction('DELETE', name, classes)
     }
   }
 }
